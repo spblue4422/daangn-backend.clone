@@ -9,7 +9,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity(name="TB_User")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long uid;
@@ -18,7 +17,6 @@ public class User {
     private String ID;
 
     //이메일 인증 여부
-
     @Column(nullable = false)
     private String PW;
 
