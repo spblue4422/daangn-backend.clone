@@ -10,6 +10,7 @@ import java.util.Date;
 @Entity(name = "TB_Category")
 public class Category {
     @Id
+    @Column(name = "Category_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
