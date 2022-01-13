@@ -25,4 +25,10 @@ public class CommentService {
             .build();
         return commentRepository.save(comment);
     }
+
+    public String updateComment(long commentId, String content) {
+        //comment 수정 방법 찾자
+        Comment comment = commentRepository.getById(commentId);
+        return ("수정");
+    }
 }

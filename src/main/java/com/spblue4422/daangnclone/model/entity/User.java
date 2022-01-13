@@ -2,6 +2,7 @@ package com.spblue4422.daangnclone.model.entity;
 
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -9,14 +10,15 @@ import java.util.Date;
 @Getter
 @Builder
 @AllArgsConstructor
-@Entity(name="TB_User")
+@Entity(name="tb_user")
+@DynamicUpdate
 public class User {
     @Id
     @Column(name = "User_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long uid;
 
-    @Column(nullable = false, unique = true, length = 30)
+    @Column(nullable = false, unique = true, length = 45)
     private String email;
 
     //이메일 인증 여부
@@ -24,7 +26,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable=false, length = 20)
+    @Column(nullable=false, length = 30)
     private String name;
 
     @Column(nullable = false, unique=true, length = 40)

@@ -1,13 +1,16 @@
 package com.spblue4422.daangnclone.model.entity;
 
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Getter
 @Builder
 @AllArgsConstructor
-@Entity(name = "TB_Comment")
+@Entity(name = "tb_comment")
+@DynamicUpdate
 public class Comment {
     @Id
     @Column(name = "Comment_ID")
@@ -22,7 +25,7 @@ public class Comment {
     @JoinColumn(name = "Post_ID")
     private long postId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 500)
     private String content;
 
     @Column(nullable = false)

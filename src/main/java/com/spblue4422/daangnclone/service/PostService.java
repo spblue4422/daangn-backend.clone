@@ -23,7 +23,7 @@ public class PostService {
         return postRepository.findById(postId);
     }
 
-    public Post addPost(long userId, long categoryId, String title, String content, int price) {
+    public Post addPost(long userId, int categoryId, String title, String content, int price) {
         final Post post = Post.builder()
             .userId(userId)
             .categoryId(categoryId)

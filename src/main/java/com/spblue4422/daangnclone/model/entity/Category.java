@@ -7,7 +7,7 @@ import java.util.Date;
 @Getter
 @Builder
 @AllArgsConstructor
-@Entity(name = "TB_Category")
+@Entity(name = "tb_category")
 public class Category {
     @Id
     @Column(name = "Category_ID")

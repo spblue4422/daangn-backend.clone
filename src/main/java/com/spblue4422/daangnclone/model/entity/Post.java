@@ -1,13 +1,16 @@
 package com.spblue4422.daangnclone.model.entity;
 
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Getter
 @Builder
 @AllArgsConstructor
-@Entity(name = "TB_Post")
+@Entity(name = "tb_post")
+@DynamicUpdate
 public class Post {
     @Id
     @Column(name = "Post_ID")
@@ -20,14 +23,14 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(name="Category_ID")
-    private long categoryId;
+    private int categoryId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String title;
 
     //장소는 user랑 조인해서 불러올수 있지 않나
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1000)
     private String content;
 
     @Column(nullable = false)
@@ -45,7 +48,7 @@ public class Post {
     @Column(nullable = false)
     private Boolean isDelete;
 
-    public Post(long userId, long categoryId, String title, String content, int price) {
+    public Post(long userId, int categoryId, String title, String content, int price) {
         this.userId = userId;
         this.categoryId = categoryId;
         this.title = title;
