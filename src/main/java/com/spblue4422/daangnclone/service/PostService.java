@@ -19,18 +19,51 @@ public class PostService {
         return postRepository.findAll();
     }
 
-    public Optional<Post> getOnePost(long postId) {
-        return postRepository.findById(postId);
+    public List<Post> getAllPostsByIsComplete(int status) {
+        return postRepository.findAllByIsCompleteAndIsDeleteFalse(status);
+    }
+
+    public List<Post> getAllPostsByUserId(long userId) {
+        return postRepository.findAllByUserIdAndIsDeleteFalse(userId);
+    }
+
+    public Post getOnePost(long postId) {
+        return postRepository.findById(postId).orElseThrow();
     }
 
     public Post addPost(long userId, int categoryId, String title, String content, int price) {
-        final Post post = Post.builder()
+        final Post aPost = Post.builder()
             .userId(userId)
             .categoryId(categoryId)
             .title(title)
             .content(content)
             .price(price)
             .build();
-        return postRepository.save(post);
+        return postRepository.save(aPost);
+    }
+
+    public String modifyPost(long postId, int categoryId, String title, String content, int price) {
+        Post post = postRepository.findByIdAndIsDeleteFalse(postId).orElseThrow();
+
+        final Post mPost = Post.builder()
+                .categoryId(categoryId)
+                .title(title)
+                .content(content)
+                .price(price)
+                .build();
+        postRepository.save(mPost);
+
+        return ("수정 성공");
+    }
+
+    public String removePost(long postId) {
+        Post post = postRepository.findByIdAndIsDeleteFalse(postId).orElseThrow();
+
+        Post rPost = Post.builder()
+                .isDelete(true)
+                .build();
+        postRepository.save(rPost);
+
+        return ("삭제 성공");
     }
 }

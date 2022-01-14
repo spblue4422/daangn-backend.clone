@@ -7,7 +7,7 @@ import java.util.Date;
 @Getter
 @Builder
 @AllArgsConstructor
-@Entity(name = "TB_Photo")
+@Entity(name = "tb_photo")
 public class Photo {
     @Id
     @Column(name = "Photo_ID")

@@ -7,7 +7,7 @@ import java.util.Date;
 @Getter
 @Builder
 @AllArgsConstructor
-@Entity(name="TB_Interest")
+@Entity(name="tb_interest")
 public class Interest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

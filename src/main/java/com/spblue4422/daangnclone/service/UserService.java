@@ -1,6 +1,7 @@
 package com.spblue4422.daangnclone.service;
 
 import com.spblue4422.daangnclone.model.entity.User;
+import com.spblue4422.daangnclone.model.DTO.*;
 import com.spblue4422.daangnclone.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
@@ -19,12 +20,12 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public Optional<User> getUser(long userId) {
-        return userRepository.findById(userId);
+    public User getOneUser(long userId) {
+        return userRepository.findById(userId).orElseThrow();
     }
 
-    public Optional<User> getUserByEmail(String email) {
-            return userRepository.findByEmail(email);
+    public User getUserByEmail(String email) {
+            return userRepository.findByEmail(email).orElseThrow();
     }
 
     public String addUser(String email, String name, String nickName, String password, String phone, String region, String prof) {
@@ -34,7 +35,7 @@ public class UserService {
 //                return ("아이디 중복");
 //            }
 
-            final User user = User.builder()
+            final User aUser = User.builder()
                     .email(email)
                     .name(name)
                     .nickName(nickName)
@@ -43,8 +44,23 @@ public class UserService {
                     .region(region)
                     .profile(prof)
                     .build();
-            userRepository.save(user);
+            userRepository.save(aUser);
 
         return ("회원가입 성공");
     }
+
+    public String modifyUser(ModifyUserRequestDTO data) {
+        User user = userRepository.findByUserIdAndIsDeleteFalse(data.getUserId()).orElseThrow();
+
+        final User mUser = User.builder()
+                .nickName(data.getNickName())
+                .phone(data.getPhone())
+                .region(data.getRegion())
+                .profile(data.getProfile())
+                .build();
+        userRepository.save(mUser);
+        return ("수정 성공");
+    }
+    
+    //회원탈퇴도 추가
 }
