@@ -40,6 +40,7 @@ public class User {
 
     //지역 인증 여부
     //지역 인증 받은 날짜
+    //최대반경? 같은것도 있으려나 당근마켓에
 
     //프로필 사진 저장경로
     @Column(nullable = true)

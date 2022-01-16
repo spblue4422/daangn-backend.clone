@@ -1,6 +1,5 @@
-package com.spblue4422.daangnclone.model.DTO;
+package com.spblue4422.daangnclone.DTO.User;
 
-import com.spblue4422.daangnclone.model.entity.User;
 import lombok.*;
 
 @Getter
