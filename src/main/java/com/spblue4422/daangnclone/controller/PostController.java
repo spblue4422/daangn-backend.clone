@@ -14,6 +14,7 @@ import java.util.List;
 public class PostController {
     final PostService postService;
 
+    //post정보만 뽑아오는게 아니라 사진도 뽑아와야하고, 관심등록 여부도 확인해야함.
     public void getPostDetail(long postId) {
 
     }
