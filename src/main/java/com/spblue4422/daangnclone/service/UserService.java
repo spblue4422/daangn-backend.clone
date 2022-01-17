@@ -24,11 +24,11 @@ public class UserService {
         return userRepository.findById(userId).orElseThrow();
     }
 
-    public User getUserByEmail(String email) {
+    public User getOneUserByEmail(String email) {
             return userRepository.findByEmailAndIsDeleteFalse(email).orElse(null);
     }
 
-    public User getUserByNickName(String nickName) {
+    public User getOneUserByNickName(String nickName) {
         return userRepository.findByNickNameAndIsDeleteFalse(nickName).orElse(null);
     }
 

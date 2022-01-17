@@ -14,6 +14,10 @@ import org.springframework.stereotype.Service;
 public class CommentService {
     private final CommentRepository commentRepository;
 
+    public Comment getOneCommentById(long commentId) {
+        return commentRepository.findById(commentId).orElseThrow();
+    }
+
     public List<Comment> getAllCommentsByPostId(long postId) {
         return commentRepository.findAllByPostIdAndIsDeleteFalse(postId);
     }

@@ -4,10 +4,13 @@ import com.spblue4422.daangnclone.model.entity.User;
 import com.spblue4422.daangnclone.DTO.User.*;
 import com.spblue4422.daangnclone.repository.UserRepository;
 import com.spblue4422.daangnclone.service.UserService;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.*;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,13 +18,17 @@ import java.util.List;
 public class UserController {
     final UserService userService;
 
-    //로그인 기능
-
     //마이페이지
     @GetMapping("/myPage/:userId")
-    public MyPageInfoResponseDTO getMyPageInfo(@RequestBody long userId) {
+    public MyPageInfoResponseDTO getMyPageInfo(@RequestBody long userId, HttpServletRequest httpServletRequest) {
         try {
             //본인이 맞는지 확인.
+            HttpSession httpSession = httpServletRequest.getSession();
+            UserSessionDTO dto = (UserSessionDTO) httpSession.getAttribute("user");
+            if(dto.getUid() != userId) {
+                //로그인된 유저정보랑 다른 유저
+                return null;
+            }
 
 
             User user = userService.getOneUser(userId);
@@ -45,28 +52,12 @@ public class UserController {
         }
     }
 
-    // 아이디 중복확인
-    @PostMapping("/doubleCheck/userId")
-    public void doubleCheckEmail(@RequestBody String email) {
-        try {
-            if(userService.getUserByEmail(email) != null) {
-
-            }
-            else {
-
-            }
-        }
-        catch(Exception ex) {
-
-        }
-    }
-
     //닉네임 중복확인
     @PostMapping("/doubleCheck/nickName")
     public void doubleCheckNickName(@RequestBody String nickName) {
         try {
             //이미 사용중인경우
-            if(userService.getUserByNickName(nickName) != null) {
+            if(userService.getOneUserByNickName(nickName) != null) {
                 return;
             }
             else {
@@ -77,23 +68,20 @@ public class UserController {
 
         }
     }
-    //유저 정보 추가(회원가입)
-    //사진은 어떻게 할것인가...
-    @PostMapping("/signUp")
-    public void addUserInfo(@RequestBody AddUserRequestDTO req) {
-        try {
-            String ret = userService.addUser(req);
-        }
-        catch(Exception ex) {
 
-        }
-    }
 
     //유저 정보 수정
     @PostMapping("/modify/:userId")
-    public void modifyUserInfo(@RequestBody ModifyUserRequestDTO req) {
+    public void modifyUserInfo(@RequestBody ModifyUserRequestDTO req, HttpServletRequest httpServletRequest) {
         try {
             //로그인여부 확인 필요
+            HttpSession httpSession = httpServletRequest.getSession();
+            UserSessionDTO dto = (UserSessionDTO) httpSession.getAttribute("user");
+            if(dto.getUid() != req.getUserId()) {
+                //로그인된 유저정보랑 다른 유저
+                return;
+            }
+            //유저 정보 수정
             ModifyUserResponseDTO res = userService.modifyUser(req);
             //return res.getMessage();
         }
