@@ -4,7 +4,7 @@ import com.spblue4422.daangnclone.model.entity.Post;
 import com.spblue4422.daangnclone.DTO.Post.*;
 import com.spblue4422.daangnclone.repository.PostRepository;
 import com.spblue4422.daangnclone.service.PostService;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

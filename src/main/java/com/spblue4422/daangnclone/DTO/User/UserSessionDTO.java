@@ -6,11 +6,11 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 public class UserSessionDTO {
-    private long uid;
+    private long userId;
     private String email;
 
-    public UserSessionDTO(long uid, String email) {
-        this.uid = uid;
+    public UserSessionDTO(long userId, String email) {
+        this.userId = userId;
         this.email = email;
     }
 }

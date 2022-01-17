@@ -24,7 +24,7 @@ public class User {
     //이메일 인증 여부
 
     @Column(nullable = false)
-    private String password;
+    private byte[] password;
 
     @Column(nullable=false, length = 30)
     private String name;
@@ -55,7 +55,7 @@ public class User {
     @Column(nullable = false)
     private Boolean isDelete;
 
-    public User(String email, String password, String name, String nickName, String phone, String region, String profile) {
+    public User(String email, byte[] password, String name, String nickName, String phone, String region, String profile) {
         this.email = email;
         this.password = password;
         this.name = name;
