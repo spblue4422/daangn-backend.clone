@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post, Long>{
     List<Post> findAllByIsCompleteAndIsDeleteFalse(int status);
     List<Post> findAllByUserIdAndIsDeleteFalse(long userId);
-    Optional<Post> findByIdAndIsDeleteFalse(long postId);
+    Optional<Post> findByPostIdAndIsDeleteFalse(long postId);
 }

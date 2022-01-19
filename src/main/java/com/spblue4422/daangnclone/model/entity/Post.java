@@ -13,16 +13,16 @@ import java.util.Date;
 @DynamicUpdate
 public class Post {
     @Id
-    @Column(name = "Post_ID")
+    //@Column(name = "postId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long pid;
+    private long postId;
 
-    @ManyToOne
-    @JoinColumn(name = "User_ID")
+    @ManyToOne(targetEntity = User.class)
+    @JoinColumn(name = "user_userid")
     private long userId;
 
-    @ManyToOne
-    @JoinColumn(name="Category_ID")
+    @ManyToOne(targetEntity = Category.class)
+    @JoinColumn(name="category_categoryid")
     private int categoryId;
 
     @Column(nullable = false, length = 100)

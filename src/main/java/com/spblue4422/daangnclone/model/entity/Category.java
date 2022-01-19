@@ -10,9 +10,9 @@ import java.util.Date;
 @Entity(name = "tb_category")
 public class Category {
     @Id
-    @Column(name = "Category_ID")
+    //@Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int categoryId;
 
     @Column(nullable = false, length = 25)
     private String name;

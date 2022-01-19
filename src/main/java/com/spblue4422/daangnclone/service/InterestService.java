@@ -23,7 +23,7 @@ public class InterestService {
     //등록과 해제를 하나의 함수로 합치면 더 깔끔하지않을까
     public String addInterest(long userId, long postId) {
 
-        final Interest aInterest = Interest.builder()
+        Interest aInterest = Interest.builder()
                 .userId(userId)
                 .postId(postId)
                 .build();

@@ -7,9 +7,9 @@ import lombok.*;
 @NoArgsConstructor
 public class UserLoginRequestDTO {
     private String email;
-    private byte[] password;
+    private String password;
 
-    public UserLoginRequestDTO(String email, byte[] password) {
+    public UserLoginRequestDTO(String email, String password) {
         this.email = email;
         this.password = password;
     }

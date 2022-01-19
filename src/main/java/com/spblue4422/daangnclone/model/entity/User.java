@@ -1,7 +1,6 @@
 package com.spblue4422.daangnclone.model.entity;
 
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
@@ -14,25 +13,24 @@ import java.util.Date;
 @DynamicUpdate
 public class User {
     @Id
-    @Column(name = "User_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long uid;
+    private long userId;
 
-    @Column(nullable = false, unique = true, length = 45)
+    @Column(nullable = false, unique = true)
     private String email;
 
     //이메일 인증 여부
 
     @Column(nullable = false)
-    private byte[] password;
+    String password;
 
-    @Column(nullable=false, length = 30)
+    @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, unique=true, length = 40)
+    @Column(unique = true)
     private String nickName;
 
-    @Column(nullable = false, length = 15)
+    @Column(nullable = false)
     private String phone;
 
     @Column(nullable = false)
@@ -43,19 +41,19 @@ public class User {
     //최대반경? 같은것도 있으려나 당근마켓에
 
     //프로필 사진 저장경로
-    @Column(nullable = true)
+    @Column()
     private String profile;
 
     //뱃지 목록 배열
     //평가수치
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     private Date Reg_dt;
 
     @Column(nullable = false)
     private Boolean isDelete;
 
-    public User(String email, byte[] password, String name, String nickName, String phone, String region, String profile) {
+    public User(String email, String password, String name, String nickName, String phone, String region, String profile) {
         this.email = email;
         this.password = password;
         this.name = name;

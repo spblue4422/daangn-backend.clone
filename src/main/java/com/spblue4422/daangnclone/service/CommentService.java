@@ -15,7 +15,8 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
     public Comment getOneCommentById(long commentId) {
-        return commentRepository.findById(commentId).orElseThrow();
+        //return commentRepository.findById(commentId).orElseThrow();
+        return commentRepository.findById(commentId).orElse(null);
     }
 
     public List<Comment> getAllCommentsByPostId(long postId) {
@@ -24,7 +25,7 @@ public class CommentService {
 
     //return으로 dto를 넘기는것도 생각해봐야함.
     public Comment addComment(long userId, long postId, String content) {
-        final Comment aComment = Comment.builder()
+        Comment aComment = Comment.builder()
             .userId(userId)
             .postId(postId)
             .content(content)
@@ -37,27 +38,27 @@ public class CommentService {
     public String modifyComment(long commentId, String content) {
         //comment 수정 방법 찾자
         //예외 throw
-        Comment comment = commentRepository.findByIdAndIsDeleteFalse(commentId).orElseThrow();
+        //Comment comment = commentRepository.findByIdAndIsDeleteFalse(commentId).orElseThrow();
 
         //수정이 잘 될지는 확인해 봐야할듯
-        final Comment mComment = Comment.builder()
-                .cid(commentId)
+        Comment mComment = Comment.builder()
+                .commentId(commentId)
                 .content(content)
                 .build();
         commentRepository.save(mComment);
 
         return ("수정");
     }
-    
+
     public String removeComment(long commentId) {
-        Comment rComment = commentRepository.findByIdAndIsDeleteFalse(commentId).orElseThrow();
-        
-        final Comment newComment = Comment.builder()
-                .cid(commentId)
+        //Comment rComment = commentRepository.findByIdAndIsDeleteFalse(commentId).orElseThrow();
+
+        Comment rComment = Comment.builder()
+                .commentId(commentId)
                 .isDelete(true)
                 .build();
         commentRepository.save(rComment);
-        
+
         return ("삭제 처리");
     }
 }

@@ -11,14 +11,14 @@ import java.util.Date;
 public class Interest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long interestId;
 
-    @ManyToOne
-    @JoinColumn(name = "User_ID")
+    @ManyToOne(targetEntity = User.class)
+    @JoinColumn(name = "user_userid")
     private long userId;
 
-    @ManyToOne
-    @JoinColumn(name = "Post_ID")
+    @ManyToOne(targetEntity = Post.class)
+    @JoinColumn(name = "post_postid")
     private long postId;
 
     @Column

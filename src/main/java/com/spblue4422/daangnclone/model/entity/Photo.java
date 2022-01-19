@@ -10,12 +10,12 @@ import java.util.Date;
 @Entity(name = "tb_photo")
 public class Photo {
     @Id
-    @Column(name = "Photo_ID")
+    //@Column(name = "photoId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long photoId;
 
-    @ManyToOne()
-    @JoinColumn(name = "Post_ID")
+    @ManyToOne(targetEntity = Post.class)
+    @JoinColumn(name = "post_postid")
     private long postId;
 
     @Column(nullable = false)

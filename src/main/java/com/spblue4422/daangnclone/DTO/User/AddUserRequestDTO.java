@@ -7,18 +7,18 @@ import lombok.*;
 @NoArgsConstructor
 public class AddUserRequestDTO {
     private String email;
+    private String password;
     private String name;
     private String nickName;
-    private byte[] password;
     private String phone;
     private String region;
     private String profile;
 
-    public AddUserRequestDTO(String email, String name, String nickName, byte[] password, String phone, String region, String prof) {
+    public AddUserRequestDTO(String email, String password, String name, String nickName, String phone, String region, String prof) {
         this.email = email;
+        this.password = password;
         this.name = name;
         this.nickName = nickName;
-        this.password = password;
         this.phone = phone;
         this.region = region;
         this.profile = prof;

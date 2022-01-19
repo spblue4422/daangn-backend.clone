@@ -13,16 +13,16 @@ import java.util.Date;
 @DynamicUpdate
 public class Comment {
     @Id
-    @Column(name = "Comment_ID")
+    //@Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long cid;
+    private long commentId;
 
-    @ManyToOne
-    @JoinColumn(name="User_ID")
+    @ManyToOne(targetEntity = User.class)
+    @JoinColumn(name="user_userid")
     private long userId;
 
-    @ManyToOne
-    @JoinColumn(name = "Post_ID")
+    @ManyToOne(targetEntity = Post.class)
+    @JoinColumn(name = "post_postid")
     private long postId;
 
     @Column(nullable = false, length = 500)

@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long>{
     List<Comment> findAllByPostIdAndIsDeleteFalse(long postId);
-    Optional<Comment> findByIdAndIsDeleteFalse(long commentId);
+    Optional<Comment> findBycommentIdAndIsDeleteFalse(long commentId);
 }

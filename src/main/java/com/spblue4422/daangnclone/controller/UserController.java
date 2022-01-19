@@ -16,7 +16,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @RequestMapping("/user")
 public class UserController {
-    final UserService userService;
+    private final UserService userService;
 
     //마이페이지
     @GetMapping("/myPage/:userId")
@@ -25,7 +25,7 @@ public class UserController {
             //본인이 맞는지 확인.
             HttpSession httpSession = httpServletRequest.getSession();
             UserSessionDTO dto = (UserSessionDTO) httpSession.getAttribute("user");
-            if(dto.getUid() != userId) {
+            if(dto.getUserId() != userId) {
                 //로그인된 유저정보랑 다른 유저
                 return null;
             }
@@ -54,39 +54,40 @@ public class UserController {
 
     //닉네임 중복확인
     @PostMapping("/doubleCheck/nickName")
-    public void doubleCheckNickName(@RequestBody String nickName) {
+    public String doubleCheckNickName(@RequestBody String nickName) {
         try {
             //이미 사용중인경우
             if(userService.getOneUserByNickName(nickName) != null) {
-                return;
+                return ("중복");
             }
             else {
-
+                return("사용 가능");
             }
         }
         catch(Exception ex) {
-
+            return (ex.getMessage());
         }
     }
 
 
     //유저 정보 수정
     @PostMapping("/modify/:userId")
-    public void modifyUserInfo(@RequestBody ModifyUserRequestDTO req, HttpServletRequest httpServletRequest) {
+    public String modifyUserInfo(@RequestBody ModifyUserRequestDTO req, HttpServletRequest httpServletRequest) {
         try {
             //로그인여부 확인 필요
             HttpSession httpSession = httpServletRequest.getSession();
             UserSessionDTO dto = (UserSessionDTO) httpSession.getAttribute("user");
-            if(dto.getUid() != req.getUserId()) {
+            if(dto.getUserId() != req.getUserId()) {
                 //로그인된 유저정보랑 다른 유저
-                return;
+                return null;
             }
             //유저 정보 수정
             ModifyUserResponseDTO res = userService.modifyUser(req);
             //return res.getMessage();
+            return ("성공");
         }
         catch(Exception ex) {
-
+            return null;
         }
     }
 }
