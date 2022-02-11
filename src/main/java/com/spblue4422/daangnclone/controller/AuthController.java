@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.servlet.http.*;
+import java.util.Map;
 import java.util.Objects;
 
 @RestController
@@ -53,14 +54,15 @@ public class AuthController {
     }
 
     // 아이디 중복확인
-    @PostMapping("/doubleCheck/userId")
-    public String doubleCheckEmail(@RequestBody String email) {
+    @PostMapping("/doubleCheck/email")
+    public String doubleCheckEmail(@RequestBody Map<String, String> req) {
         try {
+            String email = req.get("email");
             if(userService.getOneUserByEmail(email) != null) {
-                return("사용할 수 있는 이메일입니다.");
+                return("이미 등록되어 있는 이메일입니다.");
             }
             else {
-                return("이미 등록되어 있는 이메일입니다.");
+                return("사용할 수 있는 이메일입니다");
             }
         }
         catch(Exception ex) {

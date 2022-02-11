@@ -6,6 +6,7 @@ import java.util.Date;
 
 @Getter
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "tb_category")
 public class Category {

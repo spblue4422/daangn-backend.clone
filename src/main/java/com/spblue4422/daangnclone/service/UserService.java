@@ -1,5 +1,6 @@
 package com.spblue4422.daangnclone.service;
 
+import com.spblue4422.daangnclone.DTO.Common.BasicResponseDTO;
 import com.spblue4422.daangnclone.model.entity.User;
 import com.spblue4422.daangnclone.DTO.User.*;
 import com.spblue4422.daangnclone.repository.UserRepository;
@@ -27,7 +28,7 @@ public class UserService {
     }
 
     public User getOneUserByEmail(String email) {
-            return userRepository.findByEmailAndIsDeleteFalse(email).orElse(null);
+        return userRepository.findByEmailAndIsDeleteFalse(email).orElse(null);
     }
 
     public User getOneUserByNickName(String nickName) {
@@ -52,7 +53,7 @@ public class UserService {
         return ("가입 성공");
     }
     //그냥 String으로 반환하는것도 고려
-    public ModifyUserResponseDTO modifyUser(ModifyUserRequestDTO req) {
+    public BasicResponseDTO modifyUser(ModifyUserRequestDTO req) {
         //User user = userRepository.findByUserIdAndIsDeleteFalse(req.getUserId()).orElseThrow();
         User user = userRepository.findByUserIdAndIsDeleteFalse(req.getUserId()).orElse(null);
 
@@ -65,6 +66,6 @@ public class UserService {
                 .build();
         userRepository.save(mUser);
 
-        return new ModifyUserResponseDTO(1, "수정 성공");
+        return new BasicResponseDTO(1, "수정 성공");
     }
 }

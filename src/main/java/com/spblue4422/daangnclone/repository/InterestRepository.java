@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface InterestRepository extends JpaRepository<Interest, Long> {
     List<Interest> findAllByPostId(long postId);
     List<Interest> findAllByUserId(long userId);
-    Optional<Interest> findByPostIdAndUserId(long postId, long userId);
+    Optional<Interest> findByUserIdAndPostId(long userId, long postId);
 }
