@@ -3,29 +3,27 @@ package com.spblue4422.daangnclone.controller;
 import com.spblue4422.daangnclone.DTO.Common.BasicResponseDTO;
 import com.spblue4422.daangnclone.model.entity.User;
 import com.spblue4422.daangnclone.DTO.User.*;
-import com.spblue4422.daangnclone.repository.UserRepository;
 import com.spblue4422.daangnclone.service.UserService;
+import com.spblue4422.daangnclone.service.PostService;
 import lombok.*;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.*;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
+    private final PostService postService;
 
     //마이페이지
-    @GetMapping("/myPage/:userId")
-    public MyPageInfoResponseDTO getMyPageInfo(@RequestBody Map<String, Long> req, HttpServletRequest httpServletRequest) {
+    @GetMapping("/myPage/{userId}")
+    public MyPageInfoResponseDTO getMyPageInfo(@PathVariable long userId, HttpServletRequest httpServletRequest) {
         try {
             //본인이 맞는지 확인.
-            long userId = req.get("userId");
             HttpSession httpSession = httpServletRequest.getSession();
             UserSessionDTO dto = (UserSessionDTO) httpSession.getAttribute("user");
             if(dto.getUserId() != userId) {
@@ -33,8 +31,8 @@ public class UserController {
                 return null;
             }
 
-
             User user = userService.getOneUser(userId);
+            //int postCount = postService.getAllPostsByUserId(userId).size();
             return new MyPageInfoResponseDTO(user.getEmail(), user.getNickName(), user.getPhone(), user.getRegion(), user.getProfile());
         }
         catch(Exception ex) {
@@ -43,7 +41,7 @@ public class UserController {
     }
 
     //다른 유저 정보 확인
-    @GetMapping("/{userId}")
+    @GetMapping("/{userId}/info")
     public BriefUserInfoResponseDTO getOtherUserInfo(@PathVariable Long userId) {
         try {
             User user = userService.getOneUser(userId);

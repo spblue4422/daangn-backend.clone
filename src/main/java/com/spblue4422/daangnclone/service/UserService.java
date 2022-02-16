@@ -1,6 +1,7 @@
 package com.spblue4422.daangnclone.service;
 
 import com.spblue4422.daangnclone.DTO.Common.BasicResponseDTO;
+import com.spblue4422.daangnclone.common.DateFormatter;
 import com.spblue4422.daangnclone.model.entity.User;
 import com.spblue4422.daangnclone.DTO.User.*;
 import com.spblue4422.daangnclone.repository.UserRepository;
@@ -35,7 +36,7 @@ public class UserService {
         return userRepository.findByNickNameAndIsDeleteFalse(nickName).orElse(null);
     }
 
-    public String addUser(AddUserRequestDTO req, String ePassword) {
+    public BasicResponseDTO addUser(AddUserRequestDTO req, String ePassword) {
         //String에서 DTO로 바꾸기
         User aUser = User.builder()
                 .email(req.getEmail())
@@ -45,12 +46,12 @@ public class UserService {
                 .phone(req.getPhone())
                 .region(req.getRegion())
                 .profile(req.getProfile())
-                .Reg_dt(new Date())
+                .Reg_dt(DateFormatter.dtFormat(new Date()))
                 .isDelete(false)
                 .build();
-        userRepository.save(aUser);
+        User user = userRepository.save(aUser);
 
-        return ("가입 성공");
+        return new BasicResponseDTO(1, "가입 성공", user.getUserId());
     }
     //그냥 String으로 반환하는것도 고려
     public BasicResponseDTO modifyUser(ModifyUserRequestDTO req) {
@@ -66,6 +67,11 @@ public class UserService {
                 .build();
         userRepository.save(mUser);
 
-        return new BasicResponseDTO(1, "수정 성공");
+        return new BasicResponseDTO(1, "수정 성공", mUser.getUserId());
+    }
+
+    //게시글, 댓글, 사진, 관심 수 다 삭제 해야할거임.
+    public void deleteUser(long userId) {
+        
     }
 }

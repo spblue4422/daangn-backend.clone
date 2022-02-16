@@ -2,6 +2,7 @@ package com.spblue4422.daangnclone.model.entity;
 
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
+import com.spblue4422.daangnclone.common.DateFormatter;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -19,12 +20,12 @@ public class Post {
     private long postId;
 
     @ManyToOne(targetEntity = User.class)
-    @JoinColumn(name = "user_userid")
-    private long userId;
+    @JoinColumn(name = "userId")
+    private User user;
 
     @ManyToOne(targetEntity = Category.class)
-    @JoinColumn(name="category_categoryid")
-    private int categoryId;
+    @JoinColumn(name="categoryId")
+    private Category category;
 
     @Column(nullable = false, length = 100)
     private String title;
@@ -44,20 +45,18 @@ public class Post {
     private int isComplete;
 
     @Column(nullable = false)
-    private Date Reg_dt;
+    private String Reg_dt;
 
     @Column(nullable = false)
     private Boolean isDelete;
 
-    public Post(long userId, int categoryId, String title, String content, int price) {
-        this.userId = userId;
-        this.categoryId = categoryId;
+    public Post(String title, String content, int price) {
         this.title = title;
         this.content = content;
         this.price = price;
         this.like = 0;
         this.isComplete = 0;
-        this.Reg_dt = new Date();
+        this.Reg_dt = DateFormatter.dtFormat(new Date());
         this.isDelete = false;
     }
 }

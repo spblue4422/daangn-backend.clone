@@ -4,13 +4,14 @@ import com.spblue4422.daangnclone.DTO.Common.BasicResponseDTO;
 import com.spblue4422.daangnclone.DTO.Post.AddPostRequestDTO;
 import com.spblue4422.daangnclone.DTO.Post.ModifyIsCompleteRequestDTO;
 import com.spblue4422.daangnclone.DTO.Post.ModifyPostRequestDTO;
-import com.spblue4422.daangnclone.model.entity.Interest;
-import com.spblue4422.daangnclone.model.entity.Post;
+import com.spblue4422.daangnclone.model.entity.*;
 import com.spblue4422.daangnclone.DTO.Post.*;
 import com.spblue4422.daangnclone.DTO.User.UserSessionDTO;
 import com.spblue4422.daangnclone.repository.PostRepository;
 import com.spblue4422.daangnclone.service.InterestService;
+import com.spblue4422.daangnclone.service.PhotoService;
 import com.spblue4422.daangnclone.service.PostService;
+import com.spblue4422.daangnclone.service.UserService;
 import lombok.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,21 +23,42 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/post")
 public class PostController {
-    private PostService postService;
-    private InterestService interestService;
+    private final UserService userService;
+    private final PostService postService;
+    private final InterestService interestService;
+    private final PhotoService photoService;
 
     //post정보만 뽑아오는게 아니라 사진도 뽑아와야하고, 관심등록 여부도 확인해야함.
+
     @GetMapping("/{postId}/detail")
-    public Post getPostDetail(@PathVariable long postId) {
+    public Post getPostDetail(@PathVariable long postId, HttpServletRequest httpServletRequest) {
         try {
+            HttpSession httpSession = httpServletRequest.getSession();
+            UserSessionDTO dto = (UserSessionDTO) httpSession.getAttribute("user");
             Post post = postService.getOnePost(postId);
 
+            if(dto == null) {
+                //로그인 안되어 있음.
+            } else {
+                Interest interest = interestService.getOneByUserIdAndPostId(dto.getUserId(), postId);
+                if(interest == null) {
+                    //관심등록 안되어 있음.
+                }
+                else {
+                    //되어 있음.
+                }
+            }
+            // 사진정보 불러와야함.
+            List<Photo> photoList = photoService.getAllPhotosByPostId(postId);
+
+            // res에 있는 정보를 통해 유저랑 카테고리 정보 불러오기
             return post;
         } catch(Exception ex) {
             return null;
         }
     }
 
+    @PostMapping("/posts")
     public List<Post> getPostList(@RequestBody Map<String, Integer> req) {
         try {
             int status = req.get("isComplete");
@@ -50,19 +72,47 @@ public class PostController {
                 postList = postService.getAllPostsByIsComplete(status);
             }
 
+            //DTO로 바꿔서 전달하는게 더 나을듯?
             return postList;
         } catch(Exception ex) {
             return null;
         }
     }
 
-    public List<Post> getMyPostList(@RequestBody Map<String, Long> req) {
+    @GetMapping("/myPosts/{userId}")
+    public List<Post> getMyPostList(@PathVariable long userId, HttpServletRequest httpServletRequest) {
         try {
-            long userId = req.get("userId");
+            HttpSession httpSession = httpServletRequest.getSession();
+            UserSessionDTO dto = (UserSessionDTO) httpSession.getAttribute("user");
+            if(dto.getUserId() != userId) {
+                return null;
+            }
+
             List<Post> postList = postService.getAllPostsByUserId(userId);
 
             return postList;
         } catch(Exception ex) {
+            return null;
+        }
+    }
+
+    @GetMapping("/myInterests/{userId}")
+    public List<Post> getMyInterestList(@PathVariable long userId, HttpServletRequest httpServletRequest) {
+        try {
+            HttpSession httpSession = httpServletRequest.getSession();
+            UserSessionDTO dto = (UserSessionDTO)httpSession.getAttribute("user");
+
+            if(dto.getUserId() != userId) {
+                return null; //로그인된 사람의 정보가 아닐때
+            }
+
+            List<Long> postIdList = interestService.getAllPostIdsByUserId(userId);
+            List<Post> postList = postService.getAllPostsInPostIds(postIdList);
+
+            return postList;
+            //여기서 interest에 들어가있는 postId랑 조인된 post들 목록을 쭉 뽑아야함.
+        }
+        catch(Exception ex) {
             return null;
         }
     }
@@ -76,8 +126,9 @@ public class PostController {
                 //로그인 안됨.
                 throw new Exception();
             }
-
-            Post post = postService.addPost(req, dto.getUserId());
+            User currentUser = userService.getOneUser(dto.getUserId());
+            Category category = postService.getPostCategory(req.getCategoryId());
+            BasicResponseDTO res = postService.addPost(req, currentUser, category);
 
             return ("성공");
         }
@@ -91,7 +142,10 @@ public class PostController {
         try {
             HttpSession httpSession = httpServletRequest.getSession();
             UserSessionDTO dto = (UserSessionDTO) httpSession.getAttribute("user");
-            if(dto == null) {
+            Post post = postService.getOnePost(postId);
+            
+            if(dto == null || post.getUser().getUserId() == dto.getUserId()) {
+                //로그인이 안되어 있거나, 본인이 쓴 게시글일때
                 throw new Exception();
             }
 
@@ -113,14 +167,15 @@ public class PostController {
         try {
             HttpSession httpSession = httpServletRequest.getSession();
             UserSessionDTO dto = (UserSessionDTO) httpSession.getAttribute("user");
-            Post post = postService.getOnePost(req.getPostId());
+            Post res = postService.getOnePost(req.getPostId());
+            Category category = postService.getPostCategory(req.getCategoryId());
 
             //로그인이 안되어 있거나, 잘못된 로그인 정보거나 분리해야하나.
-            if(dto == null || dto.getUserId() != post.getUserId()) {
+            if(dto == null || dto.getUserId() != res.getUser().getUserId()) {
                 throw new Exception();
             }
 
-            return postService.modifyPost(req);
+            return postService.modifyPost(req, category);
         }
         catch(Exception ex) {
             return null;
@@ -132,10 +187,10 @@ public class PostController {
         try {
             HttpSession httpSession = httpServletRequest.getSession();
             UserSessionDTO dto = (UserSessionDTO) httpSession.getAttribute("user");
-            Post post = postService.getOnePost(req.getPostId());
+            Post res = postService.getOnePost(req.getPostId());
 
             //로그인이 안되어 있거나, 잘못된 로그인 정보거나 분리해야하나.
-            if(dto == null || dto.getUserId() != post.getUserId()) {
+            if(dto == null || dto.getUserId() != res.getUser().getUserId()) {
                 throw new Exception();
             }
 

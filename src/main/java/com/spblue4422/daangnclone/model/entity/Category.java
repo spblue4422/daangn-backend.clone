@@ -2,7 +2,6 @@ package com.spblue4422.daangnclone.model.entity;
 
 import lombok.*;
 import javax.persistence.*;
-import java.util.Date;
 
 @Getter
 @Builder
@@ -11,7 +10,6 @@ import java.util.Date;
 @Entity(name = "tb_category")
 public class Category {
     @Id
-    //@Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int categoryId;
 

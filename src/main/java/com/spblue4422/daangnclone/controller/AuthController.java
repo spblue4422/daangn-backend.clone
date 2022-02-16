@@ -1,5 +1,6 @@
 package com.spblue4422.daangnclone.controller;
 
+import com.spblue4422.daangnclone.DTO.Common.BasicResponseDTO;
 import com.spblue4422.daangnclone.model.entity.User;
 import com.spblue4422.daangnclone.DTO.User.*;
 import com.spblue4422.daangnclone.repository.UserRepository;
@@ -77,9 +78,9 @@ public class AuthController {
         try {
             //이메일, 닉네임 중복확인 된 상태
             String encodedPassword = passwordEncoder.encode(req.getPassword());
-            String ret = userService.addUser(req, encodedPassword);
+            BasicResponseDTO res = userService.addUser(req, encodedPassword);
 
-            return ret;
+            return res.getMessage();
             //return (req.getEmail() + " " + req.getNickName());
         }
         catch(Exception ex) {

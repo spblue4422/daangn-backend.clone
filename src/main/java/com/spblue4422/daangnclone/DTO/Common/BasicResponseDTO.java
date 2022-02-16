@@ -8,9 +8,11 @@ import lombok.*;
 public class BasicResponseDTO {
     private int status;
     private String message;
+    private long id;
 
-    public BasicResponseDTO(int sts, String msg) {
+    public BasicResponseDTO(int sts, String msg, long id) {
         this.status = sts;
         this.message = msg;
+        this.id = id;
     }
 }

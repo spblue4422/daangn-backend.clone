@@ -1,12 +1,14 @@
 package com.spblue4422.daangnclone.service;
 
 import com.spblue4422.daangnclone.DTO.Common.BasicResponseDTO;
+import com.spblue4422.daangnclone.common.DateFormatter;
 import com.spblue4422.daangnclone.model.entity.Interest;
 import com.spblue4422.daangnclone.repository.InterestRepository;
 import lombok.*;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.Basic;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -26,21 +28,24 @@ public class InterestService {
         return interestRepository.findAllByUserId(userId);
     }
 
+    public List<Long> getAllPostIdsByUserId(long userId) { return interestRepository.findPostIdsByUserId(userId); }
+
     //등록과 해제를 하나의 함수로 합치면 더 깔끔하지않을까
     public BasicResponseDTO addInterest(long userId, long postId) {
 
         Interest aInterest = Interest.builder()
                 .userId(userId)
                 .postId(postId)
+                //.Reg_dt(DateFormatter.dtFormat(new Date()))
                 .build();
-        interestRepository.save(aInterest);
+        Interest interest = interestRepository.save(aInterest);
 
-        return new BasicResponseDTO(1, "성공");
+        return new BasicResponseDTO(1, "성공", interest.getInterestId());
     }
 
     //디비삭제
     public BasicResponseDTO removeInterest(long interestId) {
         interestRepository.deleteById(interestId);
-        return new BasicResponseDTO(1, "성공");
+        return new BasicResponseDTO(1, "성공", interestId);
     }
 }

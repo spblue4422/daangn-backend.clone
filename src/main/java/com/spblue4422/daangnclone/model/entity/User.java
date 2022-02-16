@@ -1,5 +1,6 @@
 package com.spblue4422.daangnclone.model.entity;
 
+import com.spblue4422.daangnclone.common.DateFormatter;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -41,15 +42,23 @@ public class User {
     //지역 인증 받은 날짜
     //최대반경? 같은것도 있으려나 당근마켓에
 
-    //프로필 사진 저장경로
     @Column()
     private String profile;
+
+//    @Column()
+//    private int profileSize;
+//
+//    @Column()
+//    private String type;
+//
+//    @Column()
+//    private byte[] profileData;
 
     //뱃지 목록 배열
     //평가수치
 
     @Column(nullable = false)
-    private Date Reg_dt;
+    private String Reg_dt;
 
     @Column(nullable = false)
     private Boolean isDelete;
@@ -62,7 +71,7 @@ public class User {
         this.phone = phone;
         this.region = region;
         this.profile = profile;
-        this.Reg_dt = new Date();
+        this.Reg_dt = DateFormatter.dtFormat(new Date());
         this.isDelete = false;
     }
 }

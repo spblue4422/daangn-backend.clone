@@ -1,9 +1,11 @@
 package com.spblue4422.daangnclone.model.entity;
 
+import com.spblue4422.daangnclone.common.DateFormatter;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.text.DateFormat;
 import java.util.Date;
 
 @Getter
@@ -19,11 +21,11 @@ public class Comment {
     private long commentId;
 
     @ManyToOne(targetEntity = User.class)
-    @JoinColumn(name="user_userid")
+    @JoinColumn(name="userId")
     private long userId;
 
     @ManyToOne(targetEntity = Post.class)
-    @JoinColumn(name = "post_postid")
+    @JoinColumn(name = "postId")
     private long postId;
 
     @Column(nullable = false, length = 500)
@@ -33,7 +35,7 @@ public class Comment {
     private int like;
 
     @Column(nullable = false)
-    private Date Reg_dt;
+    private String Reg_dt;
 
     @Column(nullable = false)
     private Boolean isDelete;
@@ -43,7 +45,7 @@ public class Comment {
         this.postId = postId;
         this.content = content;
         this. like = 0;
-        this.Reg_dt = new Date();
+        this.Reg_dt = DateFormatter.dtFormat(new Date());
         this.isDelete = false;
     }
 }
